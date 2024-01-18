@@ -1,0 +1,11 @@
+Proiectul meu consta in dezvoltarea unei aplicatii dedicate cinematografiei, care permite utilizatorilor sa descopere informatii despre diverse filme si actori, sa clasifice filmele bazandu-se pe diferite criterii, sa scrie recenzii, sa acorde rating-uri si sa compuna liste personalizate de filme favorite, inclusiv un watchlist cu filme pe care doresc sa le vizioneze.
+
+
+link class diagram: 
+
+https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&title=nagarro.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1lv1NHwyB7PfidKpfwkWUgGjgF9VPsnFW%26export%3Ddownload
+
+
+link use-case diagram:
+
+https://viewer.diagrams.net/?tags=%7B%7D&highlight=0000ff&edit=_blank&layers=1&nav=1&page-id=dNkRNVO866pri42c6NtE&title=nagarro.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1lv1NHwyB7PfidKpfwkWUgGjgF9VPsnFW%26export%3Ddownload
