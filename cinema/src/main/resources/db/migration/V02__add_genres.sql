@@ -1,0 +1,16 @@
+INSERT INTO genres (type) VALUES
+                              ('Action'),
+                              ('Adventure'),
+                              ('Comedy'),
+                              ('Crime'),
+                              ('Drama'),
+                              ('Fantasy'),
+                              ('Historical'),
+                              ('Horror'),
+                              ('Mystery'),
+                              ('Romance'),
+                              ('Science Fiction'),
+                              ('Thriller'),
+                              ('Western'),
+                              ('Animation'),
+                              ('Documentary');

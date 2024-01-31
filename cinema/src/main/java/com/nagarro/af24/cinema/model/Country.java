@@ -23,7 +23,7 @@ import java.util.Set;
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "country_id")
     private Long countryId;
 
