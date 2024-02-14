@@ -28,3 +28,11 @@ spring:
       baselineOnMigrate: true
       schemas:
         - public
+  logging:
+    level:
+      root: WARN
+      com.nagarro.af24.cinema: INFO
+    file:
+      name: logs/appLog.log
+    pattern:
+      file: "%d [%level] %c{1.} [%t] %m%n"
