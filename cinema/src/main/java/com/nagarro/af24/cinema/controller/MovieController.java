@@ -2,6 +2,7 @@ package com.nagarro.af24.cinema.controller;
 
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public MovieDTO addMovie(@RequestBody MovieDTO movieDTO) {
+    public MovieDTO addMovie(@Valid @RequestBody MovieDTO movieDTO) {
         return movieService.addMovie(movieDTO);
     }
 
