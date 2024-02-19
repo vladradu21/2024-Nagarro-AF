@@ -9,19 +9,19 @@ import jakarta.validation.constraints.Size;
 import java.util.Set;
 
 public record MovieDTO(
-        @Size(min = 3, max = 100, message = "Titlul trebuie să aiba intre 3 si 100 de caractere.")
-        @NotBlank(message = "Titlul nu poate fi gol.")
+        @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters.")
+        @NotBlank(message = "Title cannot be blank.")
         String title,
 
-        @NotNull(message = "Genurile nu pot fi nule.")
+        @NotNull(message = "Genres cannot be null.")
         Set<String> genres,
 
-        @NotNull(message = "Anul nu poate fi nul.")
-        @Min(value = 1900, message = "Anul trebuie să fie cel putin 1900.")
+        @NotNull(message = "Year cannot be null.")
+        @Min(value = 1900, message = "Year must be at least 1900.")
         int year,
 
-        @NotNull(message = "Scorul nu poate fi nul.")
-        @DecimalMin(value = "0.0", message = "Scorul trebuie sa fie cel putin 0.0.")
+        @NotNull(message = "Score cannot be null.")
+        @DecimalMin(value = "0.0", message = "Score must be at least 0.0.")
         double score
 ) {
 }
