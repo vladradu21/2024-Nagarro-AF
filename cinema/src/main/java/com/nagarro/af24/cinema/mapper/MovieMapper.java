@@ -12,6 +12,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,10 @@ public abstract class MovieMapper {
 
     @Mapping(target = "genres", ignore = true)
     public abstract Movie toEntity(MovieDTO movieDTO);
+
+    public abstract List<MovieDTO> toDTOs(List<Movie> movies);
+
+    public abstract List<Movie> toEntities(List<MovieDTO> movieDTOs);
 
     @Named("genreSetToStringSet")
     Set<String> genreSetToStringSet(Set<Genre> genres) {
