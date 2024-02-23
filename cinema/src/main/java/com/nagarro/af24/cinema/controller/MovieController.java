@@ -28,12 +28,12 @@ public class MovieController {
     }
 
     @GetMapping
-    public MovieDTO getMovie(@RequestParam String title) {
-        return movieService.getMovie(title);
+    public MovieDTO getMovie(@RequestParam String title, @RequestParam int year) {
+        return movieService.getMovie(title, year);
     }
 
     @DeleteMapping
-    public void deleteMovie(@RequestParam String title) {
-        movieService.deleteMovie(title);
+    public void deleteMovie(@RequestParam String title, @RequestParam int year) {
+        movieService.deleteMovie(title, year);
     }
 }

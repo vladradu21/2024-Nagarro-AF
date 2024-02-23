@@ -22,12 +22,12 @@ public class MovieActorController {
     }
 
     @PostMapping
-    public MovieDetailsDTO addActorToMovie(@RequestParam String movieTitle, @RequestParam List<String> actorsNames) {
-        return movieActorService.addActorToMovie(movieTitle, actorsNames);
+    public MovieDetailsDTO addActorToMovie(@RequestParam String movieTitle, @RequestParam int year, @RequestParam List<String> actorsNames) {
+        return movieActorService.addActorToMovie(movieTitle, year, actorsNames);
     }
 
     @GetMapping
-    public MovieDetailsDTO getMovieDetails(@RequestParam String movieTitle) {
-        return movieActorService.getMovieDetails(movieTitle);
+    public MovieDetailsDTO getMovieDetails(@RequestParam String movieTitle, @RequestParam int year) {
+        return movieActorService.getMovieDetails(movieTitle, year);
     }
 }
