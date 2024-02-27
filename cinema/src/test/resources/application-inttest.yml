@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: inttest
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:latest:///cinemadb
+    username: root
+    password: test
+  flyway:
+    enabled: false
