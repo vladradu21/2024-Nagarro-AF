@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("inttest")
+@ActiveProfiles("inttest-containers-flyway")
 class MovieControllerIntegrationTest extends AbstractMySQLContainer {
     @Autowired
     private MockMvc mockMvc;

@@ -1,0 +1,16 @@
+INSERT INTO countries (name) VALUES
+                                 ('United States'),
+                                 ('United Kingdom'),
+                                 ('Canada'),
+                                 ('Australia'),
+                                 ('India'),
+                                 ('France'),
+                                 ('Germany'),
+                                 ('Italy'),
+                                 ('Spain'),
+                                 ('Japan'),
+                                 ('China'),
+                                 ('Russia'),
+                                 ('Brazil'),
+                                 ('South Korea'),
+                                 ('Mexico');

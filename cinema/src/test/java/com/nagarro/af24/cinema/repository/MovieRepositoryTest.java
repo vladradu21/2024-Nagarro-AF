@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("inttest")
+@ActiveProfiles("inttest-containers-flyway")
 class MovieRepositoryTest extends AbstractMySQLContainer {
     private Movie movieToSave;
     private Movie savedMovie;

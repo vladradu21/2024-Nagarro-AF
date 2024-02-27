@@ -17,7 +17,7 @@ import java.util.List;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("inttest")
+@ActiveProfiles("inttest-containers-flyway")
 class ActorRepositoryTest extends AbstractMySQLContainer {
     private List<Actor> actorsToSave;
     private List<Actor> savedActors;
