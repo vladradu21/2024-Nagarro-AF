@@ -3,8 +3,7 @@ spring:
     activate:
       on-profile: inttest
   datasource:
-    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mysql:latest:///cinemadb
+    url: jdbc:tc:mysql:5.7.32:///cinemadb
     username: root
     password: test
   flyway:
