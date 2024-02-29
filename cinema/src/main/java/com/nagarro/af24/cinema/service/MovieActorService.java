@@ -35,7 +35,6 @@ public class MovieActorService {
         List<Actor> actors = actorRepository.findByNameIn(actorsNames);
         List<Actor> existingActors = movie.getActors();
         existingActors.addAll(actors);
-        movie.setActors(existingActors);
 
         Movie savedMovie = movieRepository.save(movie);
         MovieDTO movieDTO = movieMapper.toDTO(savedMovie);
