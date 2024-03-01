@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:tc:mysql:5.7.32:///cinemadb
+    username: root
+    password: test
