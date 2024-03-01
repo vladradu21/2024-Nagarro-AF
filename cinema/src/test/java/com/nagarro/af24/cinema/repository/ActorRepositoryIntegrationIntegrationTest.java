@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-class ActorRepositoryTest extends BaseRepositoryTest {
+class ActorRepositoryIntegrationIntegrationTest extends BaseRepositoryIntegrationTest {
     private List<Actor> actorsToSave;
     private List<Actor> savedActors;
 

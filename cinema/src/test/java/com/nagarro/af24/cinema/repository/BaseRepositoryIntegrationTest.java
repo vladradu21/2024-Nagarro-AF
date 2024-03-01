@@ -13,7 +13,7 @@ import org.testcontainers.containers.MySQLContainer;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("inttest-containers-flyway")
 @Sql(scripts = "classpath:/scripts/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public abstract class BaseRepositoryTest {
+public abstract class BaseRepositoryIntegrationTest {
     static final MySQLContainer<?> MY_SQL_CONTAINER;
 
     static {
