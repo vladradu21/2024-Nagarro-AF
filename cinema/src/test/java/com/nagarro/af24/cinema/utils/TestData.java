@@ -21,6 +21,15 @@ public class TestData {
         );
     }
 
+    public static Actor getActor() {
+        return new Actor(
+                null,
+                "Tim Robbins",
+                30,
+                Gender.MALE,
+                null);
+    }
+
     public static List<Actor> getActors() {
         return List.of(
                 new Actor(null, "Tim Robbins", 30, Gender.MALE, null),
@@ -62,5 +71,16 @@ public class TestData {
                 "MALE",
                 "Wrong Country"
         );
+    }
+
+    public static List<ActorDTO> getActorDTOs() {
+        return List.of(
+                new ActorDTO("Tim Robbins", 30, "MALE", "United States"),
+                new ActorDTO("Morgan Freeman", 70, "MALE", "United States")
+        );
+    }
+
+    public static List<String> getActorsNames() {
+        return List.of("Tim Robbins", "Morgan Freeman");
     }
 }
