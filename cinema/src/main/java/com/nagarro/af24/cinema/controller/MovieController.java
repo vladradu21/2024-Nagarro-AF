@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,11 @@ public class MovieController {
     @GetMapping
     public MovieDTO getMovie(@RequestParam String title, @RequestParam int year) {
         return movieService.getMovie(title, year);
+    }
+
+    @PutMapping
+    public MovieDTO updateMovie(@Valid @RequestBody MovieDTO movieDTO) {
+        return movieService.updateMovie(movieDTO);
     }
 
     @DeleteMapping

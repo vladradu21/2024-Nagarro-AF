@@ -29,13 +29,12 @@ public class MovieActorService {
         this.actorMapper = actorMapper;
     }
 
-    public MovieDetailsDTO addActorToMovie(String movieTitle, int year, List<String> actorsNames) {
+    public MovieDetailsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
 
         List<Actor> actors = actorRepository.findByNameIn(actorsNames);
-        List<Actor> existingActors = movie.getActors();
-        existingActors.addAll(actors);
+        movie.setActors(actors);
 
         Movie savedMovie = movieRepository.save(movie);
         MovieDTO movieDTO = movieMapper.toDTO(savedMovie);
