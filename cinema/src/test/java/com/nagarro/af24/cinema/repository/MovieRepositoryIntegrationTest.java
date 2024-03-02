@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class MovieRepositoryIntegrationIntegrationTest extends BaseRepositoryIntegrationTest {
+class MovieRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
     private Movie movieToSave;
     private Movie savedMovie;
 
