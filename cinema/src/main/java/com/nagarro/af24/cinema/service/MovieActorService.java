@@ -4,6 +4,7 @@ import com.nagarro.af24.cinema.dto.ActorDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
+import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.mapper.ActorMapper;
 import com.nagarro.af24.cinema.mapper.MovieMapper;
 import com.nagarro.af24.cinema.model.Actor;
@@ -30,7 +31,7 @@ public class MovieActorService {
 
     public MovieDetailsDTO addActorToMovie(String movieTitle, int year, List<String> actorsNames) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
-                .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
 
         List<Actor> actors = actorRepository.findByNameIn(actorsNames);
         List<Actor> existingActors = movie.getActors();
@@ -44,7 +45,7 @@ public class MovieActorService {
 
     public MovieDetailsDTO getMovieDetails(String movieTitle, int year) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
-                .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
 
         MovieDTO movieDTO = movieMapper.toDTO(movie);
         List<ActorDTO> actorDTOS = actorMapper.toDTOs(movie.getActors());

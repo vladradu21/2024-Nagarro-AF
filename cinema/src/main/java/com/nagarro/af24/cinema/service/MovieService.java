@@ -3,6 +3,7 @@ package com.nagarro.af24.cinema.service;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.exception.CustomConflictException;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
+import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.mapper.MovieMapper;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.repository.MovieRepository;
@@ -22,7 +23,7 @@ public class MovieService {
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
         if (movieRepository.findByTitleAndYear(movieDTO.title(), movieDTO.year()).isPresent()) {
-            throw new CustomConflictException("Movie already exists");
+            throw new CustomConflictException(ExceptionMessage.MOVIE_ALREADY_EXISTS.formatMessage());
         }
 
         Movie movieToSave = movieMapper.toEntity(movieDTO);
@@ -32,13 +33,13 @@ public class MovieService {
 
     public MovieDTO getMovie(String title, int year) {
         Movie movie = movieRepository.findByTitleAndYear(title, year)
-                .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
         return movieMapper.toDTO(movie);
     }
 
     public void deleteMovie(String title, int year) {
         Movie movie = movieRepository.findByTitleAndYear(title, year)
-                .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
         movieRepository.delete(movie);
     }
 }
