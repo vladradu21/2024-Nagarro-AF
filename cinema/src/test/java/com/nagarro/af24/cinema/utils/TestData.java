@@ -17,6 +17,7 @@ public class TestData {
                 null,
                 1994,
                 9.3,
+                null,
                 null
         );
     }
