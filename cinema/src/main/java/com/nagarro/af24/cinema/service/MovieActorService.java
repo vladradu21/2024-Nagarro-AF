@@ -11,6 +11,7 @@ import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.repository.ActorRepository;
 import com.nagarro.af24.cinema.repository.MovieRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class MovieActorService {
         this.actorMapper = actorMapper;
     }
 
+    @Transactional
     public MovieDetailsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));

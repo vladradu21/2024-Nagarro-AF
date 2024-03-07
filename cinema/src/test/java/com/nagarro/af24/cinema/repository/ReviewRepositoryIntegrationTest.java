@@ -24,9 +24,7 @@ class ReviewRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         Movie movieToSave = TestData.getMovie();
         savedMovie = movieRepository.save(movieToSave);
         List<Review> reviewsToSave = TestData.getReviews();
-        for (Review review : reviewsToSave) {
-            review.setMovie(savedMovie);
-        }
+        reviewsToSave.forEach(review -> review.setMovie(savedMovie));
         savedReviews = reviewRepository.saveAll(reviewsToSave);
     }
 

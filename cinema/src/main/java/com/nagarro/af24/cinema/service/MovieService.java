@@ -38,13 +38,17 @@ public class MovieService {
     }
 
     public MovieDTO updateMovie(MovieDTO movieDTO) {
-        return movieMapper.toDTO(
-                movieRepository.findByTitleAndYear(movieDTO.title(), movieDTO.year()).map(movie -> {
-                    movie.setGenres(movieMapper.toEntity(movieDTO).getGenres());
-                    movie.setScore(movieDTO.score());
-                    return movieRepository.save(movie);
-                }).orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()))
-        );
+        Movie movie = movieRepository.findByTitleAndYear(movieDTO.title(), movieDTO.year())
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+
+        updateMovieFromDTO(movie, movieDTO);
+
+        return movieMapper.toDTO(movieRepository.save(movie));
+    }
+
+    private void updateMovieFromDTO(Movie movie, MovieDTO movieDTO) {
+        movie.setGenres(movieMapper.toEntity(movieDTO).getGenres());
+        movie.setScore(movieDTO.score());
     }
 
     public void deleteMovie(String title, int year) {

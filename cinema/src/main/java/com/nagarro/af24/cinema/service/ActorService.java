@@ -39,14 +39,18 @@ public class ActorService {
     }
 
     public ActorDTO updateActor(ActorDTO actorDTO) {
-        return actorMapper.toDTO(
-                actorRepository.findByName(actorDTO.name()).map(actor -> {
-                    actor.setAge(actorDTO.age());
-                    actor.setGender(Gender.valueOf(actorDTO.gender()));
-                    actor.setCountry(actorMapper.toEntity(actorDTO).getCountry());
-                    return actorRepository.save(actor);
-                }).orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.ACTOR_NOT_FOUND.formatMessage()))
-        );
+        Actor actor = actorRepository.findByName(actorDTO.name())
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.ACTOR_NOT_FOUND.formatMessage()));
+
+        updateActorFromDTO(actor, actorDTO);
+
+        return actorMapper.toDTO(actorRepository.save(actor));
+    }
+
+    private void updateActorFromDTO(Actor actor, ActorDTO actorDTO) {
+        actor.setAge(actorDTO.age());
+        actor.setGender(Gender.valueOf(actorDTO.gender()));
+        actor.setCountry(actorMapper.toEntity(actorDTO).getCountry());
     }
 
     public void deleteActor(String name) {
