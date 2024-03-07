@@ -28,8 +28,8 @@ public class MovieActorService {
         this.actorMapper = actorMapper;
     }
 
-    public MovieDetailsDTO addActorToMovie(String movieTitle, List<String> actorsNames) {
-        Movie movie = movieRepository.findByTitle(movieTitle)
+    public MovieDetailsDTO addActorToMovie(String movieTitle, int year, List<String> actorsNames) {
+        Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
 
         List<Actor> actors = actorRepository.findByNameIn(actorsNames);
@@ -42,8 +42,8 @@ public class MovieActorService {
         return new MovieDetailsDTO(movieDTO, actorDTOS);
     }
 
-    public MovieDetailsDTO getMovieDetails(String movieTitle) {
-        Movie movie = movieRepository.findByTitle(movieTitle)
+    public MovieDetailsDTO getMovieDetails(String movieTitle, int year) {
+        Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
 
         MovieDTO movieDTO = movieMapper.toDTO(movie);

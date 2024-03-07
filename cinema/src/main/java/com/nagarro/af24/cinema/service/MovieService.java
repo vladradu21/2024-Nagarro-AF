@@ -21,7 +21,7 @@ public class MovieService {
     }
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
-        if (movieRepository.findByTitle(movieDTO.title()).isPresent()) {
+        if (movieRepository.findByTitleAndYear(movieDTO.title(), movieDTO.year()).isPresent()) {
             throw new CustomConflictException("Movie already exists");
         }
 
@@ -30,14 +30,14 @@ public class MovieService {
         return movieMapper.toDTO(savedMovie);
     }
 
-    public MovieDTO getMovie(String title) {
-        Movie movie = movieRepository.findByTitle(title)
+    public MovieDTO getMovie(String title, int year) {
+        Movie movie = movieRepository.findByTitleAndYear(title, year)
                 .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
         return movieMapper.toDTO(movie);
     }
 
-    public void deleteMovie(String title) {
-        Movie movie = movieRepository.findByTitle(title)
+    public void deleteMovie(String title, int year) {
+        Movie movie = movieRepository.findByTitleAndYear(title, year)
                 .orElseThrow(() -> new CustomNotFoundException("Movie not found"));
         movieRepository.delete(movie);
     }
