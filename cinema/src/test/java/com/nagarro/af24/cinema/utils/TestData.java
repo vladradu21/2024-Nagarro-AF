@@ -17,13 +17,13 @@ public class TestData {
     }
 
     public static Actor getActor() {
-        return new Actor(null, "Tim Robbins", 30, Gender.MALE, null);
+        return new Actor(null, "Tim Robbins", 30, Gender.MALE, null, null);
     }
 
     public static List<Actor> getActors() {
         return List.of(
-                new Actor(null, "Tim Robbins", 30, Gender.MALE, null),
-                new Actor(null, "Morgan Freeman", 70, Gender.MALE, null));
+                new Actor(null, "Tim Robbins", 30, Gender.MALE, null, null),
+                new Actor(null, "Morgan Freeman", 70, Gender.MALE, null, null));
     }
 
     public static MovieDTO getMovieDTO() {

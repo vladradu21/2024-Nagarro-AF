@@ -40,16 +40,18 @@ class MovieActorServiceTest {
         Movie movie = TestData.getMovie();
         String title = movie.getTitle();
         int year = movie.getYear();
-        Movie savedMovie = TestData.getMovie();
         List<String> actorsNames = TestData.getActorsNames();
-        List<Actor> actors = TestData.getActors();
+        List<Actor> foundActors = TestData.getActors();
+        Movie savedMovie = TestData.getMovie();
         MovieDTO movieDTO = TestData.getMovieDTO();
+        List<Actor> savedActors = TestData.getActors();
         List<ActorDTO> actorDTOS = TestData.getActorDTOs();
         when(movieRepository.findByTitleAndYear(title, year)).thenReturn(Optional.of(movie));
-        when(actorRepository.findByNameIn(actorsNames)).thenReturn(actors);
+        when(actorRepository.findByNameIn(actorsNames)).thenReturn(foundActors);
         when(movieRepository.save(movie)).thenReturn(savedMovie);
         when(movieMapper.toDTO(savedMovie)).thenReturn(movieDTO);
-        when(actorMapper.toDTOs(savedMovie.getActors())).thenReturn(actorDTOS);
+        when(actorRepository.findByMovieTitleAndYear(title, year)).thenReturn(savedActors);
+        when(actorMapper.toDTOs(savedActors)).thenReturn(actorDTOS);
         MovieDetailsDTO expected = new MovieDetailsDTO(movieDTO, actorDTOS);
 
         MovieDetailsDTO result = movieActorService.assignActorsToMovie(title, year, actorsNames);
@@ -63,10 +65,12 @@ class MovieActorServiceTest {
         String title = movie.getTitle();
         int year = movie.getYear();
         MovieDTO movieDTO = TestData.getMovieDTO();
+        List<Actor> actors = TestData.getActors();
         List<ActorDTO> actorDTOS = TestData.getActorDTOs();
         when(movieRepository.findByTitleAndYear(title, year)).thenReturn(Optional.of(movie));
         when(movieMapper.toDTO(movie)).thenReturn(movieDTO);
-        when(actorMapper.toDTOs(movie.getActors())).thenReturn(actorDTOS);
+        when(actorRepository.findByMovieTitleAndYear(title, year)).thenReturn(actors);
+        when(actorMapper.toDTOs(actors)).thenReturn(actorDTOS);
         MovieDetailsDTO expected = new MovieDetailsDTO(movieDTO, actorDTOS);
 
         MovieDetailsDTO result = movieActorService.getMovieDetails(title, year);

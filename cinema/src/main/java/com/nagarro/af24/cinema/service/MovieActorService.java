@@ -11,7 +11,6 @@ import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.repository.ActorRepository;
 import com.nagarro.af24.cinema.repository.MovieRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class MovieActorService {
         this.actorMapper = actorMapper;
     }
 
-    @Transactional
     public MovieDetailsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
@@ -40,7 +38,8 @@ public class MovieActorService {
 
         Movie savedMovie = movieRepository.save(movie);
         MovieDTO movieDTO = movieMapper.toDTO(savedMovie);
-        List<ActorDTO> actorDTOS = actorMapper.toDTOs(savedMovie.getActors());
+        List<Actor> savedActors = actorRepository.findByMovieTitleAndYear(movieTitle, year);
+        List<ActorDTO> actorDTOS = actorMapper.toDTOs(savedActors);
         return new MovieDetailsDTO(movieDTO, actorDTOS);
     }
 
@@ -49,7 +48,8 @@ public class MovieActorService {
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
 
         MovieDTO movieDTO = movieMapper.toDTO(movie);
-        List<ActorDTO> actorDTOS = actorMapper.toDTOs(movie.getActors());
+        List<Actor> actors = actorRepository.findByMovieTitleAndYear(movieTitle, year);
+        List<ActorDTO> actorDTOS = actorMapper.toDTOs(actors);
         return new MovieDetailsDTO(movieDTO, actorDTOS);
     }
 }
