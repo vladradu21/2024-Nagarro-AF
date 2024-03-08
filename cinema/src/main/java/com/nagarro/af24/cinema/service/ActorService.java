@@ -1,25 +1,36 @@
 package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.MovieDTO;
+import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.exception.CustomConflictException;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
 import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.mapper.ActorMapper;
+import com.nagarro.af24.cinema.mapper.MovieMapper;
 import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Gender;
+import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.repository.ActorRepository;
+import com.nagarro.af24.cinema.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ActorService {
     private final ActorRepository actorRepository;
     private final ActorMapper actorMapper;
+    private final MovieRepository movieRepository;
+    private final MovieMapper movieMapper;
 
     @Autowired
-    public ActorService(ActorRepository actorRepository, ActorMapper actorMapper) {
+    public ActorService(ActorRepository actorRepository, ActorMapper actorMapper, MovieRepository movieRepository, MovieMapper movieMapper) {
         this.actorRepository = actorRepository;
         this.actorMapper = actorMapper;
+        this.movieRepository = movieRepository;
+        this.movieMapper = movieMapper;
     }
 
     public ActorDTO addActor(ActorDTO actorDTO) {
@@ -51,6 +62,20 @@ public class ActorService {
         actor.setAge(actorDTO.age());
         actor.setGender(Gender.valueOf(actorDTO.gender()));
         actor.setCountry(actorMapper.toEntity(actorDTO).getCountry());
+    }
+
+    public MovieDetailsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
+        Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+
+        List<Actor> actors = actorRepository.findByNameIn(actorsNames);
+        movie.setActors(actors);
+
+        Movie savedMovie = movieRepository.save(movie);
+        MovieDTO movieDTO = movieMapper.toDTO(savedMovie);
+        List<Actor> savedActors = actorRepository.findByMovieTitleAndYear(movieTitle, year);
+        List<ActorDTO> actorDTOS = actorMapper.toDTOs(savedActors);
+        return new MovieDetailsDTO(movieDTO, actorDTOS);
     }
 
     public void deleteActor(String name) {

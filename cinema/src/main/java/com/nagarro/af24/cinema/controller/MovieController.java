@@ -1,6 +1,7 @@
 package com.nagarro.af24.cinema.controller;
 
 import com.nagarro.af24.cinema.dto.MovieDTO;
+import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class MovieController {
     @GetMapping
     public MovieDTO getMovie(@RequestParam String title, @RequestParam int year) {
         return movieService.getMovie(title, year);
+    }
+
+    @GetMapping("/all-with-details")
+    public MovieDetailsDTO getMovieDetails(@RequestParam String movieTitle, @RequestParam int year) {
+        return movieService.getMovieDetails(movieTitle, year);
     }
 
     @PutMapping
