@@ -2,6 +2,7 @@ package com.nagarro.af24.cinema.utils;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
+import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Gender;
@@ -30,12 +31,20 @@ public class TestData {
         return new MovieDTO("Shawshank Redemption", Set.of("Drama", "Crime"), 1994, 9.3);
     }
 
+    public static MovieDTO getUpdatedMovieDTO() {
+        return new MovieDTO("Shawshank Redemption", Set.of("Drama", "Crime", "Action"), 1994, 9.5);
+    }
+
     public static MovieDTO getMovieDTOWithWrongGenre() {
         return new MovieDTO("Shawshank Redemption", Set.of("Drama", "Wrong Genre"), 1994, 9.3);
     }
 
     public static ActorDTO getActorDTO() {
         return new ActorDTO("Tim Robbins", 30, "MALE", "United States");
+    }
+
+    public static ActorDTO getUpdatedActorDTO() {
+        return new ActorDTO("Tim Robbins", 30, "MALE", "Australia");
     }
 
     public static ActorDTO getActorDTOWithWrongCountry() {
@@ -70,5 +79,9 @@ public class TestData {
         return List.of(
                 new ReviewDTO("Let's talk about The Shawshank Redemption", 9.3, "Great movie!", "Shawshank Redemption", 1994),
                 new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994));
+    }
+
+    public static MovieDetailsDTO getMovieDetailsDTO() {
+        return new MovieDetailsDTO(getMovieDTO(), getActorDTOs());
     }
 }
