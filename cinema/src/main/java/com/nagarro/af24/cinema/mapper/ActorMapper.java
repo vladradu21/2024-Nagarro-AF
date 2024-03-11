@@ -2,6 +2,7 @@ package com.nagarro.af24.cinema.mapper;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
+import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Country;
 import com.nagarro.af24.cinema.model.Gender;
@@ -46,7 +47,7 @@ public abstract class ActorMapper {
     protected void mapCountryToEntity(ActorDTO actorDTO, @MappingTarget Actor actor) {
         if (actorDTO.country() != null) {
             Country country = countryRepository.findByName(actorDTO.country())
-                    .orElseThrow(() -> new CustomNotFoundException("Country not found for: " + actorDTO.country()));
+                    .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.COUNTRY_NOT_FOUND.formatMessage(actorDTO.country())));
             actor.setCountry(country);
         }
     }

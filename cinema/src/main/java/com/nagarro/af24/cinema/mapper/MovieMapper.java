@@ -2,6 +2,7 @@ package com.nagarro.af24.cinema.mapper;
 
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
+import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.model.Genre;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.repository.GenreRepository;
@@ -41,7 +42,7 @@ public abstract class MovieMapper {
         if (!movieDTO.genres().isEmpty()) {
             Set<Genre> genres = movieDTO.genres().stream()
                     .map(type -> genreRepository.findByType(type)
-                            .orElseThrow(() -> new CustomNotFoundException("Genre not found for: " + type)))
+                            .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.GENRE_NOT_FOUND.formatMessage(type))))
                     .collect(Collectors.toSet());
             movie.setGenres(genres);
         }

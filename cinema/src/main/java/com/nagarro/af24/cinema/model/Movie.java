@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -57,4 +58,8 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private List<Actor> actors;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private List<Review> reviews;
 }
