@@ -14,7 +14,9 @@ import com.nagarro.af24.cinema.repository.ActorRepository;
 import com.nagarro.af24.cinema.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,13 +25,15 @@ public class MovieService {
     private final MovieMapper movieMapper;
     private final ActorRepository actorRepository;
     private final ActorMapper actorMapper;
+    private final ImageStorageService imageStorageService;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, ActorRepository actorRepository, ActorMapper actorMapper) {
+    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, ActorRepository actorRepository, ActorMapper actorMapper, ImageStorageService imageStorageService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.actorRepository = actorRepository;
         this.actorMapper = actorMapper;
+        this.imageStorageService = imageStorageService;
     }
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
@@ -72,7 +76,17 @@ public class MovieService {
         movie.setScore(movieDTO.score());
     }
 
-    public void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
+    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) throws IOException {
+        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
+
+        updateMovieImagesPaths(title, year, imagesPaths);
+
+        return movieRepository.findByTitleAndYear(title, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()))
+                .getImagesPaths();
+    }
+
+    private void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
         Movie movie = movieRepository.findByTitleAndYear(title, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
         movie.setImagesPaths(imagesPaths);

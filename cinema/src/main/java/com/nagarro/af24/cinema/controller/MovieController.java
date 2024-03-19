@@ -2,7 +2,6 @@ package com.nagarro.af24.cinema.controller;
 
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
-import com.nagarro.af24.cinema.service.ImageStorageService;
 import com.nagarro.af24.cinema.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,10 @@ import java.util.List;
 @RequestMapping("/movies")
 public class MovieController {
     private final MovieService movieService;
-    private final ImageStorageService imageStorageService;
 
     @Autowired
-    public MovieController(MovieService movieService, ImageStorageService imageStorageService) {
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        this.imageStorageService = imageStorageService;
     }
 
     @PostMapping
@@ -37,15 +34,11 @@ public class MovieController {
         return movieService.addMovie(movieDTO);
     }
 
-    @PostMapping("/add-image")
-    public ResponseEntity<String> uploadMovieImage(@RequestParam String title,
-                                              @RequestParam int year,
-                                              @RequestParam("images") List<MultipartFile> files) throws IOException {
-
-        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
-        movieService.updateMovieImagesPaths(title, year, imagesPaths);
-
-        return ResponseEntity.ok().body("Images uploaded successfully!");
+    @PostMapping("/add-images")
+    public ResponseEntity<List<String>> uploadMovieImages(@RequestParam String title,
+                                                          @RequestParam int year,
+                                                          @RequestParam("images") List<MultipartFile> files) throws IOException {
+        return ResponseEntity.ok(movieService.uploadMovieImages(title, year, files));
     }
 
     @GetMapping
