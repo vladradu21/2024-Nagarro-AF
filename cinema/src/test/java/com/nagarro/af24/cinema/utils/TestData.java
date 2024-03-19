@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class TestData {
     public static Movie getMovie() {
-        return new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null);
+        return new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null, null);
     }
 
     public static Actor getActor() {

@@ -62,4 +62,6 @@ public class Movie {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private List<Review> reviews;
+
+    private String imagePath;
 }
