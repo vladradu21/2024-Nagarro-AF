@@ -72,10 +72,10 @@ public class MovieService {
         movie.setScore(movieDTO.score());
     }
 
-    public void updateMovieImagePath(String title, int year, String imagePath) {
+    public void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
         Movie movie = movieRepository.findByTitleAndYear(title, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
-        movie.setImagePath(imagePath);
+        movie.setImagesPaths(imagesPaths);
         movieRepository.save(movie);
     }
 

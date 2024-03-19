@@ -6,8 +6,6 @@ import com.nagarro.af24.cinema.service.ImageStorageService;
 import com.nagarro.af24.cinema.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/movies")
@@ -39,26 +38,14 @@ public class MovieController {
     }
 
     @PostMapping("/add-image")
-    public ResponseEntity<byte[]> uploadMovieImage(@RequestParam String title,
-                                                   @RequestParam int year,
-                                                   @RequestParam("image") MultipartFile file) {
-        try {
-            String imagePath = imageStorageService.storeImage(file, "movie");
-            movieService.updateMovieImagePath(title, year, imagePath); // Actualizează filmul cu noua cale a imaginii
+    public ResponseEntity<String> uploadMovieImage(@RequestParam String title,
+                                              @RequestParam int year,
+                                              @RequestParam("images") List<MultipartFile> files) throws IOException {
 
-            // Citirea conținutului fișierului și returnarea acestuia ca array de bytes
-            byte[] imageBytes = file.getBytes();
+        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
+        movieService.updateMovieImagesPaths(title, year, imagesPaths);
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG) // sau MediaType.IMAGE_PNG, depinde de tipul fișierului
-                    .body(imageBytes);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok().body("Images uploaded successfully!");
     }
 
     @GetMapping
