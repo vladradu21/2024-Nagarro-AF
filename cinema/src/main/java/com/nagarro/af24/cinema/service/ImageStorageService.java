@@ -1,6 +1,7 @@
 package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.exception.CustomConflictException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,28 +17,49 @@ import java.util.Objects;
 
 @Service
 public class ImageStorageService {
-    private static final Path MOVIE_IMAGE_PATH = Paths.get("D:/nagarro/images/movies");
-    private static final Path ACTOR_IMAGE_PATH = Paths.get("D:/nagarro/images/actors");
+    private final Path movieImagePath;
+    private final Path actorImagePath;
+
+    public ImageStorageService(@Value("${variables.image.path.movies}") String moviePath,
+                               @Value("${variables.image.path.actors}") String actorPath) {
+        this.movieImagePath = Paths.get(moviePath);
+        this.actorImagePath = Paths.get(actorPath);
+    }
 
     public List<String> storeImages(List<MultipartFile> files, String entityType) throws IOException {
         List<String> storedFilesPaths = new ArrayList<>();
-        Path storagePath = entityType.equals("movie") ? MOVIE_IMAGE_PATH : ACTOR_IMAGE_PATH;
-
-        if (!Files.exists(storagePath)) {
-            Files.createDirectories(storagePath);
-        }
+        Path storagePath = getStoragePath(entityType);
+        ensureDirectoryExists(storagePath);
 
         for (MultipartFile file : files) {
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            if (fileName.contains("..")) {
-                throw new CustomConflictException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
-
-            Path destinationPath = storagePath.resolve(fileName);
-            Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            storedFilesPaths.add(destinationPath.toString());
+            String fileName = validateFileName(file.getOriginalFilename());
+            storeAndRecordFile(storagePath, fileName, file, storedFilesPaths);
         }
 
         return storedFilesPaths;
+    }
+
+    private Path getStoragePath(String entityType) {
+        return entityType.equals("movie") ? movieImagePath : actorImagePath;
+    }
+
+    private void ensureDirectoryExists(Path path) throws IOException {
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
+        }
+    }
+
+    private String validateFileName(String fileName) {
+        String cleanedFileName = StringUtils.cleanPath(Objects.requireNonNull(fileName));
+        if (cleanedFileName.contains("..")) {
+            throw new CustomConflictException("invalid path sequence " + cleanedFileName);
+        }
+        return cleanedFileName;
+    }
+
+    private void storeAndRecordFile(Path storagePath, String fileName, MultipartFile file, List<String> storedFilesPaths) throws IOException {
+        Path destinationPath = storagePath.resolve(fileName);
+        Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        storedFilesPaths.add(destinationPath.toString());
     }
 }
