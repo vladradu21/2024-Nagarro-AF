@@ -45,7 +45,7 @@ public class MovieController {
         return movieService.getMovie(title, year);
     }
 
-    @GetMapping("/all-with-details")
+    @GetMapping("/with-details")
     public MovieDetailsDTO getMovieDetails(@RequestParam String movieTitle, @RequestParam int year) {
         return movieService.getMovieDetails(movieTitle, year);
     }

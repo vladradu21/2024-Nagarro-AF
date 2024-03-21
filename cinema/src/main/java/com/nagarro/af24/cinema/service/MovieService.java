@@ -45,6 +45,23 @@ public class MovieService {
         return movieMapper.toDTO(savedMovie);
     }
 
+    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) {
+        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
+
+        updateMovieImagesPaths(title, year, imagesPaths);
+
+        return movieRepository.findByTitleAndYear(title, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()))
+                .getImagesPaths();
+    }
+
+    private void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
+        Movie movie = movieRepository.findByTitleAndYear(title, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+        movie.setImagesPaths(imagesPaths);
+        movieRepository.save(movie);
+    }
+
     public MovieDTO getMovie(String title, int year) {
         Movie movie = movieRepository.findByTitleAndYear(title, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
@@ -79,23 +96,6 @@ public class MovieService {
     private void updateMovieFromDTO(Movie movie, MovieDTO movieDTO) {
         movie.setGenres(movieMapper.toEntity(movieDTO).getGenres());
         movie.setScore(movieDTO.score());
-    }
-
-    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) {
-        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
-
-        updateMovieImagesPaths(title, year, imagesPaths);
-
-        return movieRepository.findByTitleAndYear(title, year)
-                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()))
-                .getImagesPaths();
-    }
-
-    private void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
-        Movie movie = movieRepository.findByTitleAndYear(title, year)
-                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
-        movie.setImagesPaths(imagesPaths);
-        movieRepository.save(movie);
     }
 
     public void deleteMovie(String title, int year) {
