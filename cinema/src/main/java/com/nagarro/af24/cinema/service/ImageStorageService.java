@@ -40,7 +40,11 @@ public class ImageStorageService {
     }
 
     private Path getStoragePath(String entityType) {
-        return entityType.equals("movie") ? movieImagePath : actorImagePath;
+        return switch (entityType) {
+            case "movie" -> movieImagePath;
+            case "actor" -> actorImagePath;
+            default -> throw new CustomConflictException("invalid entity type " + entityType);
+        };
     }
 
     private void ensureDirectoryExists(Path path) throws IOException {
