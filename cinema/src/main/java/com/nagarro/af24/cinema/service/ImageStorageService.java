@@ -1,6 +1,7 @@
 package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.exception.CustomConflictException;
+import com.nagarro.af24.cinema.exception.CustomStorageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,17 +27,34 @@ public class ImageStorageService {
         this.actorImagePath = Paths.get(actorPath);
     }
 
-    public List<String> storeImages(List<MultipartFile> files, String entityType) throws IOException {
-        List<String> storedFilesPaths = new ArrayList<>();
-        Path storagePath = getStoragePath(entityType);
-        ensureDirectoryExists(storagePath);
-
-        for (MultipartFile file : files) {
-            String fileName = validateFileName(file.getOriginalFilename());
-            storeAndRecordFile(storagePath, fileName, file, storedFilesPaths);
+    public List<String> storeImages(List<MultipartFile> files, String entityType) {
+        try {
+            List<String> storedFilesPaths = new ArrayList<>();
+            Path storagePath = getStoragePath(entityType);
+            ensureDirectoryExists(storagePath);
+            processFiles(files, storagePath, storedFilesPaths);
+            return storedFilesPaths;
+        } catch (IOException e) {
+            throw new CustomStorageException("Failed to store images");
         }
+    }
 
-        return storedFilesPaths;
+    private void processFiles(List<MultipartFile> files, Path storagePath, List<String> storedFilesPaths) throws IOException {
+        for (MultipartFile file : files) {
+            String fileName = validateAndCleanFileName(file.getOriginalFilename());
+            Path destinationPath = storeFile(storagePath, fileName, file);
+            recordStoredFilePath(destinationPath, storedFilesPaths);
+        }
+    }
+
+    private Path storeFile(Path storagePath, String fileName, MultipartFile file) throws IOException {
+        Path destinationPath = storagePath.resolve(fileName);
+        Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+        return destinationPath;
+    }
+
+    private void recordStoredFilePath(Path filePath, List<String> storedFilesPaths) {
+        storedFilesPaths.add(filePath.toString());
     }
 
     private Path getStoragePath(String entityType) {
@@ -53,17 +71,11 @@ public class ImageStorageService {
         }
     }
 
-    private String validateFileName(String fileName) {
+    private String validateAndCleanFileName(String fileName) {
         String cleanedFileName = StringUtils.cleanPath(Objects.requireNonNull(fileName));
         if (cleanedFileName.contains("..")) {
             throw new CustomConflictException("invalid path sequence " + cleanedFileName);
         }
         return cleanedFileName;
-    }
-
-    private void storeAndRecordFile(Path storagePath, String fileName, MultipartFile file, List<String> storedFilesPaths) throws IOException {
-        Path destinationPath = storagePath.resolve(fileName);
-        Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-        storedFilesPaths.add(destinationPath.toString());
     }
 }

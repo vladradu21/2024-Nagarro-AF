@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -37,7 +36,7 @@ public class MovieController {
     @PostMapping("/add-images")
     public ResponseEntity<List<String>> uploadMovieImages(@RequestParam String title,
                                                           @RequestParam int year,
-                                                          @RequestParam("images") List<MultipartFile> files) throws IOException {
+                                                          @RequestParam("images") List<MultipartFile> files) {
         return ResponseEntity.ok(movieService.uploadMovieImages(title, year, files));
     }
 

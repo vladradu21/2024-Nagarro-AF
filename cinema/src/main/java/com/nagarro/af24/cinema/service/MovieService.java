@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -76,7 +75,7 @@ public class MovieService {
         movie.setScore(movieDTO.score());
     }
 
-    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) throws IOException {
+    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) {
         List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
 
         updateMovieImagesPaths(title, year, imagesPaths);
