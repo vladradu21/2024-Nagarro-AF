@@ -50,6 +50,12 @@ public class MovieController {
         return movieService.getMovieDetails(movieTitle, year);
     }
 
+    @GetMapping("/get-images")
+    public ResponseEntity<List<String>> getMovieImageUrls(@RequestParam String movieTitle, @RequestParam int year) {
+        List<String> imageUrls = movieService.getMovieImagesUrls(movieTitle, year);
+        return ResponseEntity.ok().body(imageUrls);
+    }
+
     @PutMapping
     public MovieDTO updateMovie(@Valid @RequestBody MovieDTO movieDTO) {
         return movieService.updateMovie(movieDTO);

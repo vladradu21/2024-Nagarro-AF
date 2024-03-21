@@ -61,6 +61,12 @@ public class MovieService {
         return new MovieDetailsDTO(movieDTO, actorDTOS);
     }
 
+    public List<String> getMovieImagesUrls(String movieTitle, int year) {
+        Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+        return movie.getImagesPaths();
+    }
+
     public MovieDTO updateMovie(MovieDTO movieDTO) {
         Movie movie = movieRepository.findByTitleAndYear(movieDTO.title(), movieDTO.year())
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
