@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
@@ -74,6 +75,31 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
                         .param("name", "Not Found"))
                 .andExpect(status().isNotFound())
                 .andReturn();
+    }
+
+    @Test
+    void updateActor() throws Exception {
+        //Arrange
+        ActorDTO actorToSave = TestData.getActorDTO();
+
+        //Act
+        mockMvc.perform(post("/actors")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(actorToSave)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        ActorDTO actorToUpdate = TestData.getUpdatedActorDTO();
+        MvcResult mvcResult = mockMvc.perform(put("/actors")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(actorToUpdate)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //Assert
+        ActorDTO updatedActor = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ActorDTO.class);
+        Assertions.assertEquals(actorToUpdate.name(), updatedActor.name());
+        Assertions.assertEquals(actorToUpdate.country(), updatedActor.country());
     }
 
     @Test
