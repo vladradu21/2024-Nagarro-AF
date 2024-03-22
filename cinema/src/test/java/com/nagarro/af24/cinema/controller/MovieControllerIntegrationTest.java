@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
@@ -76,6 +77,36 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
                         .param("year", String.valueOf(2021)))
                 .andExpect(status().isNotFound())
                 .andReturn();
+    }
+
+    @Test
+    void updateMovie() throws Exception {
+        //Arrange
+        MovieDTO movieToSave = TestData.getMovieDTO();
+
+        //Act and Assert
+        mockMvc.perform(post("/movies")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(movieToSave)))
+                .andExpect(status().isOk());
+
+        MovieDTO movieToUpdate = TestData.getUpdatedMovieDTO();
+        mockMvc.perform(put("/movies")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(movieToUpdate)))
+                .andExpect(status().isOk());
+
+        MvcResult mvcResult = mockMvc.perform(get("/movies")
+                        .param("title", movieToUpdate.title())
+                        .param("year", String.valueOf(movieToUpdate.year())))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MovieDTO updatedMovie = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), MovieDTO.class);
+        Assertions.assertEquals(movieToUpdate.title(), updatedMovie.title());
+        Assertions.assertEquals(movieToUpdate.year(), updatedMovie.year());
+        Assertions.assertEquals(movieToUpdate.genres(), updatedMovie.genres());
+        Assertions.assertEquals(movieToUpdate.score(), updatedMovie.score());
     }
 
     @Test
