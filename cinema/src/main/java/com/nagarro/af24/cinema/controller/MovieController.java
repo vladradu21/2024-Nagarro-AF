@@ -6,8 +6,6 @@ import com.nagarro.af24.cinema.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +29,7 @@ public class MovieController implements MovieApi {
         return movieService.addMovie(movieDTO);
     }
 
-    @PostMapping("/add-images")
+    @Override
     public ResponseEntity<List<String>> uploadMovieImages(@RequestParam String title,
                                                           @RequestParam int year,
                                                           @RequestParam("images") List<MultipartFile> files) {
@@ -48,7 +46,7 @@ public class MovieController implements MovieApi {
         return movieService.getMovieDetails(movieTitle, year);
     }
 
-    @GetMapping("/get-images")
+    @Override
     public ResponseEntity<List<String>> getMovieImageUrls(@RequestParam String movieTitle, @RequestParam int year) {
         List<String> imageUrls = movieService.getMovieImagesUrls(movieTitle, year);
         return ResponseEntity.ok().body(imageUrls);
