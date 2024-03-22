@@ -10,6 +10,7 @@ import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.model.Review;
 import lombok.SneakyThrows;
 import org.mockito.Mockito;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -100,6 +101,16 @@ public class TestData {
         MultipartFile mockFile2 = Mockito.mock(MultipartFile.class);
         lenient().when(mockFile2.getOriginalFilename()).thenReturn("file2.png");
         lenient().when(mockFile2.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[2048]));
+
+        return List.of(mockFile1, mockFile2);
+    }
+
+    public static List<MockMultipartFile> getMockedMultipartFiles() {
+        MockMultipartFile mockFile1 = new MockMultipartFile(
+                "images", "file1.jpg", "multipart/form-data", new byte[1024]);
+
+        MockMultipartFile mockFile2 = new MockMultipartFile(
+                "images", "file2.png", "multipart/form-data", new byte[2048]);
 
         return List.of(mockFile1, mockFile2);
     }
