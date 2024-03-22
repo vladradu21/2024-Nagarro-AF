@@ -7,13 +7,19 @@ import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.Gender;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.model.Review;
+import lombok.SneakyThrows;
+import org.mockito.Mockito;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Set;
 
+import static org.mockito.Mockito.lenient;
+
 public class TestData {
     public static Movie getMovie() {
-        return new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null, null);
+        return new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null, List.of("Path1", "Path2"));
     }
 
     public static Actor getActor() {
@@ -70,5 +76,18 @@ public class TestData {
         return List.of(
                 new ReviewDTO("Let's talk about The Shawshank Redemption", 9.3, "Great movie!", "Shawshank Redemption", 1994),
                 new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994));
+    }
+
+    @SneakyThrows
+    public static List<MultipartFile> getMockMultipartFiles() {
+        MultipartFile mockFile1 = Mockito.mock(MultipartFile.class);
+        lenient().when(mockFile1.getOriginalFilename()).thenReturn("file1.jpg");
+        lenient().when(mockFile1.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[1024]));
+
+        MultipartFile mockFile2 = Mockito.mock(MultipartFile.class);
+        lenient().when(mockFile2.getOriginalFilename()).thenReturn("file2.png");
+        lenient().when(mockFile2.getInputStream()).thenReturn(new ByteArrayInputStream(new byte[2048]));
+
+        return List.of(mockFile1, mockFile2);
     }
 }
