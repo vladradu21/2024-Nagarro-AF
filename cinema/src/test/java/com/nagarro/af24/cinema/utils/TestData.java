@@ -1,9 +1,12 @@
 package com.nagarro.af24.cinema.utils;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.LoginDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
+import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
+import com.nagarro.af24.cinema.dto.UserDTO;
 import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.ApplicationUser;
 import com.nagarro.af24.cinema.model.Gender;
@@ -13,6 +16,7 @@ import com.nagarro.af24.cinema.model.Role;
 import lombok.SneakyThrows;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -123,5 +127,21 @@ public class TestData {
 
     public static Set<Role> getRoles() {
         return Set.of(new Role("USER"), new Role("ADMIN"));
+    }
+
+    public static RegisterDTO getRegisterDTO() {
+        return new RegisterDTO("John", "Doe", "johndoe@gmail.com", "johndoe", "password");
+    }
+
+    public static UserDTO getUserDTO() {
+        return new UserDTO("John", "Doe", "johndoe@gmail.com", "johndoe");
+    }
+
+    public static LoginDTO getLoginDTO() {
+        return new LoginDTO("johndoe", "password");
+    }
+
+    public static Authentication getAuthentication() {
+        return Mockito.mock(Authentication.class);
     }
 }
