@@ -5,9 +5,11 @@ import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.model.Actor;
+import com.nagarro.af24.cinema.model.ApplicationUser;
 import com.nagarro.af24.cinema.model.Gender;
 import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.model.Review;
+import com.nagarro.af24.cinema.model.Role;
 import lombok.SneakyThrows;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
@@ -113,5 +115,13 @@ public class TestData {
                 "images", "file2.png", "multipart/form-data", new byte[2048]);
 
         return List.of(mockFile1, mockFile2);
+    }
+
+    public static ApplicationUser getApplicationUser() {
+        return new ApplicationUser("John", "Doe", "johndoe@gmail.com", "johndoe", "password", null);
+    }
+
+    public static Set<Role> getRoles() {
+        return Set.of(new Role("USER"), new Role("ADMIN"));
     }
 }
