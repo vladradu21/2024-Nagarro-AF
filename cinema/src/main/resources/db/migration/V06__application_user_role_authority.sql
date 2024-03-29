@@ -21,3 +21,7 @@ CREATE TABLE user_role_junction (
 );
 
 INSERT INTO roles (authority) VALUES ('ADMIN'), ('USER');
+
+CREATE TABLE users_seq(
+    next_val BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL
+)

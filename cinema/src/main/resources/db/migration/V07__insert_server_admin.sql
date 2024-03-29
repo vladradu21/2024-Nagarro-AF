@@ -5,3 +5,5 @@ SET @userId = (SELECT user_id FROM users WHERE username = 'admin');
 
 INSERT INTO user_role_junction (user_id, role_id)
 SELECT @userId, role_id FROM roles;
+
+INSERT INTO users_seq (next_val) VALUES (@userId + 1);
