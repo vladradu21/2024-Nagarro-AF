@@ -32,4 +32,27 @@ class UserRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         // assert
         Assertions.assertNull(foundUser);
     }
+
+    @Test
+    void testFindByEmail() {
+        // arrange
+        ApplicationUser userToSave = TestData.getApplicationUser();
+        ApplicationUser savedUser = userRepository.save(userToSave);
+
+        // act
+        ApplicationUser foundUser = userRepository.findByEmail(userToSave.getEmail()).orElse(null);
+
+        // assert
+        Assertions.assertNotNull(foundUser);
+        Assertions.assertEquals(savedUser.getEmail(), foundUser.getEmail());
+    }
+
+    @Test
+    void testFindByEmailNotFound() {
+        // act
+        ApplicationUser foundUser = userRepository.findByEmail("Not Found").orElse(null);
+
+        // assert
+        Assertions.assertNull(foundUser);
+    }
 }

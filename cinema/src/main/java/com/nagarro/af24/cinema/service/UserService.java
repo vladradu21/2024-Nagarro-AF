@@ -58,6 +58,7 @@ public class UserService implements UserDetailsService {
         user.setFirstname(userDTO.firstname());
         user.setLastname(userDTO.lastname());
         user.setPassword(passwordEncoder.encode(userDTO.password()));
+        user.setEmail(userDTO.email());
         Set<Role> authorities = new HashSet<>(roleRepository.findAllByAuthorityIn(userDTO.roles()));
         user.setAuthorities(authorities);
     }
