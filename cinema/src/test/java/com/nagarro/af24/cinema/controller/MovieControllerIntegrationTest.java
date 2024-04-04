@@ -6,6 +6,7 @@ import com.nagarro.af24.cinema.utils.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,6 +23,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void addMovie() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTO();
@@ -35,6 +37,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void addMovieWithWrongGenre() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTOWithWrongGenre();
@@ -47,6 +50,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void getMovie() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTO();
@@ -70,6 +74,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void getMovieNotFound() throws Exception {
         //Act and Assert
         mockMvc.perform(get("/movies")
@@ -80,6 +85,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void updateMovie() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTO();
@@ -110,6 +116,7 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void deleteMovie() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTO();
