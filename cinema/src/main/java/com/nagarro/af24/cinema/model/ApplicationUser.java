@@ -9,12 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,6 +48,10 @@ public class ApplicationUser implements UserDetails {
     )
     private Set<Role> authorities;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private List<Review> reviews;
+
     public ApplicationUser() {
         super();
         this.authorities = new HashSet<>();
@@ -62,7 +68,7 @@ public class ApplicationUser implements UserDetails {
         this.authorities = authorities;
     }
 
-    public ApplicationUser(String firstname, String lastname, String email, String username, String password, Set<Role> authorities) {
+    public ApplicationUser(String firstname, String lastname, String email, String username, String password, Set<Role> authorities, List<Review> reviews) {
         super();
         this.firstname = firstname;
         this.lastname = lastname;
@@ -70,6 +76,7 @@ public class ApplicationUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+        this.reviews = reviews;
     }
 
     public ApplicationUser(String username, String password, Set<Role> authorities) {
