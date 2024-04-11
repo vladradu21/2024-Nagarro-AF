@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class ActorController {
         this.actorService = actorService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Add a new actor", description = "Add a new actor to the database", tags = {"Actors"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Actor added successfully",
@@ -46,6 +48,7 @@ public class ActorController {
         return actorService.addActor(actorDTO);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get an actor", description = "Get an actor from the database", tags = {"Actors"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Actor found",
@@ -64,6 +67,7 @@ public class ActorController {
         return actorService.getActor(name);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update an actor", description = "Update an actor in the database", tags = {"Actors"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Actor updated successfully",
@@ -82,6 +86,7 @@ public class ActorController {
         return actorService.updateActor(actorDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Assign actors to a movie", description = "Assign actors to a movie in the database", tags = {"Actors"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Actors assigned successfully",
@@ -100,6 +105,7 @@ public class ActorController {
         return actorService.assignActorsToMovie(movieTitle, year, actorsNames);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete an actor", description = "Delete an actor from the database", tags = {"Actors"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Actor deleted successfully",

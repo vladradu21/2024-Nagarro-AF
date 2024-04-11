@@ -6,6 +6,7 @@ import com.nagarro.af24.cinema.utils.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,6 +23,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void addActor() throws Exception {
         //Arrange
         ActorDTO actorToSave = TestData.getActorDTO();
@@ -35,6 +37,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void addActorWithWrongCountry() throws Exception {
         //Arrange
         ActorDTO actorToSave = TestData.getActorDTOWithWrongCountry();
@@ -47,6 +50,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void getActor() throws Exception {
         //Arrange
         ActorDTO actorToSave = TestData.getActorDTO();
@@ -69,6 +73,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void getActorNotFound() throws Exception {
         //Act and Assert
         mockMvc.perform(get("/actors")
@@ -78,6 +83,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void updateActor() throws Exception {
         //Arrange
         ActorDTO actorToSave = TestData.getActorDTO();
@@ -103,6 +109,7 @@ class ActorControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void deleteActor() throws Exception {
         //Arrange
         ActorDTO actorToSave = TestData.getActorDTO();
