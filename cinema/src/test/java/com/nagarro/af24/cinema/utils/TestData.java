@@ -31,6 +31,12 @@ public class TestData {
         return new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null, List.of("Path1", "Path2"));
     }
 
+    public static List<Movie> getMovies() {
+        return List.of(
+                new Movie(null, "The Shawshank Redemption", null, 1994, 9.3, null, null, List.of("Path1", "Path2")),
+                new Movie(null, "The Godfather", null, 1972, 9.2, null, null, List.of("Path3", "Path4")));
+    }
+
     public static Actor getActor() {
         return new Actor(null, "Tim Robbins", 30, Gender.MALE, null, null);
     }
@@ -43,6 +49,12 @@ public class TestData {
 
     public static MovieDTO getMovieDTO() {
         return new MovieDTO("Shawshank Redemption", Set.of("Drama", "Crime"), 1994, 9.3);
+    }
+
+    public static List<MovieDTO> getMoviesDTO() {
+        return List.of(
+                new MovieDTO("Shawshank Redemption", Set.of("Drama", "Crime"), 1994, 9.3),
+                new MovieDTO("The Godfather", Set.of("Drama", "Crime"), 1972, 9.2));
     }
 
     public static MovieDTO getUpdatedMovieDTO() {
@@ -76,23 +88,23 @@ public class TestData {
     }
 
     public static Review getReview() {
-        return new Review(null, "The Shawshank Redemption, review", 9.3, "Liked it!", null);
+        return new Review(null, "The Shawshank Redemption, review", 9.3, "Liked it!", null, null);
     }
 
     public static List<Review> getReviews() {
         return List.of(
-                new Review(null, "Let's talk about The Shawshank Redemption", 9.3, "Great movie!", null),
-                new Review(null, "The Shawshank Redemption, review", 9.3, "Liked it!", null));
+                new Review(null, "Let's talk about The Shawshank Redemption", 9.3, "Great movie!", null, null),
+                new Review(null, "The Shawshank Redemption, review", 9.3, "Liked it!", null, null));
     }
 
     public static ReviewDTO getReviewDTO() {
-        return new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994);
+        return new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994, "johndoe");
     }
 
     public static List<ReviewDTO> getReviewDTOs() {
         return List.of(
-                new ReviewDTO("Let's talk about The Shawshank Redemption", 9.3, "Great movie!", "Shawshank Redemption", 1994),
-                new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994));
+                new ReviewDTO("Let's talk about The Shawshank Redemption", 9.3, "Great movie!", "Shawshank Redemption", 1994, null),
+                new ReviewDTO("The Shawshank Redemption, review", 9.3, "Liked it!", "Shawshank Redemption", 1994, null));
     }
 
     public static MovieDetailsDTO getMovieDetailsDTO() {
@@ -123,7 +135,7 @@ public class TestData {
     }
 
     public static ApplicationUser getApplicationUser() {
-        return new ApplicationUser("John", "Doe", "johndoe@gmail.com", "johndoe", "password", null);
+        return new ApplicationUser("John", "Doe", "johndoe@gmail.com", "johndoe", "password", null, null);
     }
 
     public static Set<Role> getRoles() {
