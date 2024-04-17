@@ -8,6 +8,7 @@ import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.model.Review;
 import com.nagarro.af24.cinema.repository.MovieRepository;
 import com.nagarro.af24.cinema.repository.UserRepository;
+import com.nagarro.af24.cinema.service.TokenService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -21,6 +22,8 @@ public abstract class ReviewMapper {
     private MovieRepository movieRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @Mapping(target = "movieTitle", source = "movie.title")
     @Mapping(target = "movieProductionYear", source = "movie.year")
@@ -44,7 +47,8 @@ public abstract class ReviewMapper {
 
     @Named("usernameToUser")
     ApplicationUser usernameToUserEntity(ReviewDTO reviewDTO) {
-        return userRepository.findByUsername(reviewDTO.username())
+        String username = tokenService.getCurrentUserUsername();
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.USER_NOT_FOUND.formatMessage()));
     }
 }

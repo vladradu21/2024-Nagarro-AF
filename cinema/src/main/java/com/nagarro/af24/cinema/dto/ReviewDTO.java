@@ -24,7 +24,6 @@ public record ReviewDTO(
         @NotNull(message = "Movie year cannot be null.")
         int movieProductionYear,
 
-        @NotNull(message = "Username cannot be null.")
         String username
 ) {
 }
