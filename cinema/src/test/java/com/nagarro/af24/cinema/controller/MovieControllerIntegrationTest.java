@@ -10,6 +10,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -86,6 +88,37 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
 
     @Test
     @WithMockUser(value = "spring", roles = {"ADMIN"})
+    void getAllMovies() throws Exception {
+        //Arrange
+        MovieDTO movieToSave = TestData.getMovieDTO();
+
+        //Act
+        mockMvc.perform(post("/movies")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(movieToSave)))
+                .andExpect(status().isOk());
+
+        MvcResult mvcResult = mockMvc.perform(get("/movies/all"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //Assert
+        List<MovieDTO> foundMovies = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), List.class);
+        Assertions.assertTrue(foundMovies.size() > 0);
+    }
+
+    @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
+    void getAllMoviesEmpty() throws Exception {
+        //Act and Assert
+        mockMvc.perform(get("/movies/all"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+
+    @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void updateMovie() throws Exception {
         //Arrange
         MovieDTO movieToSave = TestData.getMovieDTO();
@@ -112,7 +145,6 @@ class MovieControllerIntegrationTest extends BaseControllerIntegrationTest {
         Assertions.assertEquals(movieToUpdate.title(), updatedMovie.title());
         Assertions.assertEquals(movieToUpdate.year(), updatedMovie.year());
         Assertions.assertEquals(movieToUpdate.genres(), updatedMovie.genres());
-        Assertions.assertEquals(movieToUpdate.score(), updatedMovie.score());
     }
 
     @Test

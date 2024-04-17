@@ -2,6 +2,7 @@ package com.nagarro.af24.cinema.utils;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
 import com.nagarro.af24.cinema.dto.LoginDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.dto.RegisterDTO;
@@ -108,7 +109,7 @@ public class TestData {
     }
 
     public static MovieDetailsDTO getMovieDetailsDTO() {
-        return new MovieDetailsDTO(getMovieDTO(), getActorDTOs());
+        return new MovieDetailsDTO(getMovieDTO(), getActorDTOs(), null);
     }
 
     @SneakyThrows
@@ -164,5 +165,9 @@ public class TestData {
 
     public static UserUpdateDTO getUserUpdateDTODifferentData() {
         return new UserUpdateDTO("Different", "Data", "DifferentData@gmail.com", "johndoe", "password", List.of("USER"));
+    }
+
+    public static MovieActorsDTO getMovieActorsDTO() {
+        return new MovieActorsDTO(getMovieDTO(), getActorDTOs());
     }
 }

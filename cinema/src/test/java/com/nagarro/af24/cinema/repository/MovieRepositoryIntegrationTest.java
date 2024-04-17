@@ -1,27 +1,29 @@
 package com.nagarro.af24.cinema.repository;
 
+import com.nagarro.af24.cinema.model.ApplicationUser;
 import com.nagarro.af24.cinema.model.Movie;
+import com.nagarro.af24.cinema.model.Review;
 import com.nagarro.af24.cinema.utils.TestData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class MovieRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
-    private Movie movieToSave;
-    private Movie savedMovie;
+import java.util.List;
 
+class MovieRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
     @Autowired
     private MovieRepository movieRepository;
-
-    @BeforeEach
-    void setup() {
-        movieToSave = TestData.getMovie();
-        savedMovie = movieRepository.save(movieToSave);
-    }
+    @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void testFindByTitleAndYear() {
+        //Arrange
+        Movie movieToSave = TestData.getMovie();
+        Movie savedMovie = movieRepository.save(movieToSave);
+
         //Act
         Movie foundMovie = movieRepository.findByTitleAndYear(movieToSave.getTitle(), movieToSave.getYear()).orElse(null);
 
@@ -38,5 +40,24 @@ class MovieRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
         //Assert
         Assertions.assertNull(foundMovie);
+    }
+
+    @Test
+    void testFindAllWithReviews() {
+        //Arrange
+        Movie movieToSave = TestData.getMovie();
+        Movie savedMovie = movieRepository.save(movieToSave);
+        ApplicationUser user = TestData.getApplicationUser();
+        ApplicationUser savedUser = userRepository.save(user);
+        Review review = TestData.getReview();
+        review.setMovie(savedMovie);
+        review.setUser(savedUser);
+        Review savedReview = reviewRepository.save(review);
+
+        //Act
+        List<Movie> movies = movieRepository.findAllWithReviews();
+
+        //Assert
+        Assertions.assertFalse(movies.isEmpty());
     }
 }

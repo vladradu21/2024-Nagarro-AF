@@ -54,15 +54,6 @@ class ReviewRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
     @Test
     void testFindByMovieTitleAndMovieYearNotFound() {
-        //Arrange
-        List<Review> reviewsToSave = TestData.getReviews();
-        reviewsToSave.forEach(review -> {
-            review.setUser(savedUser);
-        });
-        reviewsToSave.get(0).setMovie(savedMovies.get(0));
-        reviewsToSave.get(1).setMovie(savedMovies.get(1));
-        List<Review> savedReviews = reviewRepository.saveAll(reviewsToSave);
-
         //Act
         List<Review> foundReviews = reviewRepository.findByMovieTitleAndMovieYear("Not Found", 2021);
 

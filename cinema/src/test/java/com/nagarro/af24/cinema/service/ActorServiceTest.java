@@ -1,8 +1,8 @@
 package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
-import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.mapper.ActorMapper;
 import com.nagarro.af24.cinema.mapper.MovieMapper;
 import com.nagarro.af24.cinema.model.Actor;
@@ -97,9 +97,9 @@ class ActorServiceTest {
         when(movieMapper.toDTO(savedMovie)).thenReturn(movieDTO);
         when(actorRepository.findByMovieTitleAndYear(title, year)).thenReturn(savedActors);
         when(actorMapper.toDTOs(savedActors)).thenReturn(actorDTOS);
-        MovieDetailsDTO expected = new MovieDetailsDTO(movieDTO, actorDTOS);
+        MovieActorsDTO expected = new MovieActorsDTO(movieDTO, actorDTOS);
 
-        MovieDetailsDTO result = actorService.assignActorsToMovie(title, year, actorsNames);
+        MovieActorsDTO result = actorService.assignActorsToMovie(title, year, actorsNames);
 
         Assertions.assertEquals(expected, result);
     }
