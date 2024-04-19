@@ -36,7 +36,8 @@ public class ReviewService {
     }
 
     public ReviewDTO updateReview(ReviewDTO reviewDTO) {
-        Review review = reviewRepository.findByMovieTitleAndMovieYearAndUserUsername(reviewDTO.movieTitle(), reviewDTO.movieProductionYear(), reviewDTO.username())
+        Review reviewToUpdate = reviewMapper.toEntity(reviewDTO);
+        Review review = reviewRepository.findByMovieTitleAndMovieYearAndUserUsername(reviewToUpdate.getMovie().getTitle(), reviewToUpdate.getMovie().getYear(), reviewToUpdate.getUser().getUsername())
                 .orElseThrow(() -> new CustomConflictException("Review not found"));
 
         updateReviewFromDTO(review, reviewDTO);

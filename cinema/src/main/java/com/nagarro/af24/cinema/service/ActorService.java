@@ -1,8 +1,8 @@
 package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
-import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.exception.CustomConflictException;
 import com.nagarro.af24.cinema.exception.CustomNotFoundException;
 import com.nagarro.af24.cinema.exception.ExceptionMessage;
@@ -64,7 +64,7 @@ public class ActorService {
         actor.setCountry(actorMapper.toEntity(actorDTO).getCountry());
     }
 
-    public MovieDetailsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
+    public MovieActorsDTO assignActorsToMovie(String movieTitle, int year, List<String> actorsNames) {
         Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
                 .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
 
@@ -75,7 +75,7 @@ public class ActorService {
         MovieDTO movieDTO = movieMapper.toDTO(savedMovie);
         List<Actor> savedActors = actorRepository.findByMovieTitleAndYear(movieTitle, year);
         List<ActorDTO> actorDTOS = actorMapper.toDTOs(savedActors);
-        return new MovieDetailsDTO(movieDTO, actorDTOS);
+        return new MovieActorsDTO(movieDTO, actorDTOS);
     }
 
     public void deleteActor(String name) {

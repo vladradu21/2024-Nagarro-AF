@@ -2,6 +2,8 @@ package com.nagarro.af24.cinema.service;
 
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.mapper.ReviewMapper;
+import com.nagarro.af24.cinema.model.ApplicationUser;
+import com.nagarro.af24.cinema.model.Movie;
 import com.nagarro.af24.cinema.model.Review;
 import com.nagarro.af24.cinema.repository.ReviewRepository;
 import com.nagarro.af24.cinema.utils.TestData;
@@ -61,8 +63,14 @@ class ReviewServiceTest {
     @Test
     void updateReview() {
         ReviewDTO reviewDTO = TestData.getReviewDTO();
+        Review reviewToUpdate = TestData.getReview();
+        Movie movie = TestData.getMovie();
+        reviewToUpdate.setMovie(movie);
+        ApplicationUser user = TestData.getApplicationUser();
+        reviewToUpdate.setUser(user);
+        when(reviewMapper.toEntity(reviewDTO)).thenReturn(reviewToUpdate);
         Review review = TestData.getReview();
-        when(reviewRepository.findByMovieTitleAndMovieYearAndUserUsername(reviewDTO.movieTitle(), reviewDTO.movieProductionYear(), reviewDTO.username())).thenReturn(java.util.Optional.of(review));
+        when(reviewRepository.findByMovieTitleAndMovieYearAndUserUsername(reviewToUpdate.getMovie().getTitle(), reviewToUpdate.getMovie().getYear(), reviewToUpdate.getUser().getUsername())).thenReturn(java.util.Optional.of(review));
         Review updatedReview = TestData.getReview();
         when(reviewRepository.save(review)).thenReturn(updatedReview);
         ReviewDTO updatedReviewDTO = TestData.getReviewDTO();

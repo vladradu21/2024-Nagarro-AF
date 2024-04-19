@@ -5,11 +5,14 @@ import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.dto.UserDTO;
+import com.nagarro.af24.cinema.service.TokenService;
 import com.nagarro.af24.cinema.utils.TestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,6 +33,8 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+    @MockBean
+    private TokenService tokenService;
 
     @BeforeEach
     @WithMockUser(value = "spring", roles = {"ADMIN"})
@@ -54,6 +59,8 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                 .andReturn();
 
         userDTO = objectMapper.readValue(result.getResponse().getContentAsString(), UserDTO.class);
+
+        Mockito.when(tokenService.getCurrentUserUsername()).thenReturn(userDTO.username());
     }
 
     @Test
@@ -66,7 +73,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                 "description",
                 moviesDTO.get(0).title(),
                 moviesDTO.get(0).year(),
-                userDTO.username()
+                null
         );
 
         //Act and Assert
@@ -88,7 +95,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                                 "description1",
                                 moviesDTO.get(0).title(),
                                 moviesDTO.get(0).year(),
-                                userDTO.username()
+                                null
                         ),
                         new ReviewDTO(
                                 "Title2",
@@ -96,7 +103,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                                 "description2",
                                 moviesDTO.get(1).title(),
                                 moviesDTO.get(1).year(),
-                                userDTO.username()
+                                null
                         )
                 )
         );
@@ -134,7 +141,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                 "description",
                 moviesDTO.get(0).title(),
                 moviesDTO.get(0).year(),
-                userDTO.username()
+                null
         );
 
         mockMvc.perform(post("/reviews")
@@ -148,7 +155,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
                 "updated description",
                 moviesDTO.get(0).title(),
                 moviesDTO.get(0).year(),
-                userDTO.username()
+                null
         );
 
         //Act

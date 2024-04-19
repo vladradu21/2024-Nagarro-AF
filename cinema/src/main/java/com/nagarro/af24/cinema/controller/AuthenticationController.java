@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,5 +32,15 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseDTO login(@RequestBody LoginDTO loginDTO) {
         return authenticationService.login(loginDTO);
+    }
+
+    @PostMapping("/forgot-password")
+    public void forgotPassword(@RequestParam String email) {
+        authenticationService.sendResetPasswordEmail(email);
+    }
+
+    @PostMapping("/reset-password")
+    public UserDTO resetPassword(@RequestParam String email, @RequestParam String otp, @RequestParam String newPassword) {
+        return authenticationService.resetPassword(email, otp, newPassword);
     }
 }

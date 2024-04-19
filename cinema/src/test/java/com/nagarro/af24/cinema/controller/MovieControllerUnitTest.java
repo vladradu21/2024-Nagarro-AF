@@ -110,6 +110,21 @@ class MovieControllerUnitTest {
     }
 
     @Test
+    void testGetAllMovies() throws Exception {
+        List<MovieDTO> movieDTOs = TestData.getMoviesDTO();
+        when(movieService.getAllMovies()).thenReturn(movieDTOs);
+
+        MvcResult mvcResult = mockMvc.perform(get("/movies/all"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<MovieDTO> foundMovieDTOs = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+
+        Assertions.assertEquals(movieDTOs.size(), foundMovieDTOs.size());
+    }
+
+    @Test
     void testGetMovieDetails() throws Exception {
         MovieDTO movieDTO = TestData.getMovieDTO();
         String title = movieDTO.title();

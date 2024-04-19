@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 class ActorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
-    private List<Actor> savedActors;
     private Movie savedMovie;
 
     @Autowired
@@ -24,13 +23,15 @@ class ActorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
     void setup() {
         Movie movieToSave = TestData.getMovie();
         savedMovie = movieRepository.save(movieToSave);
-        List<Actor> actorsToSave = TestData.getActors();
-        savedActors = actorRepository.saveAll(actorsToSave);
-        savedActors.forEach(actor -> actor.setMovies(Set.of(savedMovie)));
     }
 
     @Test
     void testFindByName() {
+        //Arrange
+        List<Actor> actorsToSave = TestData.getActors();
+        List<Actor> savedActors = actorRepository.saveAll(actorsToSave);
+        savedActors.forEach(actor -> actor.setMovies(Set.of(savedMovie)));
+
         //Act
         Actor foundActor = actorRepository.findByName(savedActors.get(0).getName()).orElse(null);
 
@@ -51,6 +52,11 @@ class ActorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
     @Test
     void testFindByNameIn() {
+        //Arrange
+        List<Actor> actorsToSave = TestData.getActors();
+        List<Actor> savedActors = actorRepository.saveAll(actorsToSave);
+        savedActors.forEach(actor -> actor.setMovies(Set.of(savedMovie)));
+
         //Act
         List<Actor> foundActors = actorRepository.findByNameIn(List.of(savedActors.get(0).getName(), savedActors.get(1).getName()));
 
@@ -71,6 +77,11 @@ class ActorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
     @Test
     void testFindByMovieTitleAndYear() {
+        //Arrange
+        List<Actor> actorsToSave = TestData.getActors();
+        List<Actor> savedActors = actorRepository.saveAll(actorsToSave);
+        savedActors.forEach(actor -> actor.setMovies(Set.of(savedMovie)));
+
         //Act
         List<Actor> foundActors = actorRepository.findByMovieTitleAndYear(savedMovie.getTitle(), savedMovie.getYear());
 

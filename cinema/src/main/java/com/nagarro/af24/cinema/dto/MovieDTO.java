@@ -1,6 +1,5 @@
 package com.nagarro.af24.cinema.dto;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,8 +19,6 @@ public record MovieDTO(
         @Min(value = 1900, message = "Year must be at least 1900.")
         int year,
 
-        @NotNull(message = "Score cannot be null.")
-        @DecimalMin(value = "0.0", message = "Score must be at least 0.0.")
         double score
 ) {
 }

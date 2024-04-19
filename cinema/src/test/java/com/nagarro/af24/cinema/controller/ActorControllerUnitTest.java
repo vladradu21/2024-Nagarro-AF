@@ -2,7 +2,7 @@ package com.nagarro.af24.cinema.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nagarro.af24.cinema.dto.ActorDTO;
-import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.service.ActorService;
 import com.nagarro.af24.cinema.utils.TestData;
 import org.junit.jupiter.api.Assertions;
@@ -94,12 +94,12 @@ class ActorControllerUnitTest {
 
     @Test
     void testAssignActorsToMovie() throws Exception {
-        MovieDetailsDTO movieDetailsDTO = TestData.getMovieDetailsDTO();
-        String title = movieDetailsDTO.movie().title();
-        int year = movieDetailsDTO.movie().year();
-        List<ActorDTO> actorDTOS = movieDetailsDTO.actors();
+        MovieActorsDTO movieActorsDTO = TestData.getMovieActorsDTO();
+        String title = movieActorsDTO.movie().title();
+        int year = movieActorsDTO.movie().year();
+        List<ActorDTO> actorDTOS = movieActorsDTO.actors();
         List<String> actorsNames = actorDTOS.stream().map(ActorDTO::name).toList();
-        when(actorService.assignActorsToMovie(title, year, actorsNames)).thenReturn(movieDetailsDTO);
+        when(actorService.assignActorsToMovie(title, year, actorsNames)).thenReturn(movieActorsDTO);
 
         MvcResult mvcResult = mockMvc.perform(put("/actors/assign-to-movie")
                         .param("movieTitle", title)
@@ -108,11 +108,11 @@ class ActorControllerUnitTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        MovieDetailsDTO foundMovieDetailsDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), MovieDetailsDTO.class);
+        MovieActorsDTO foundMovieActorsDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), MovieActorsDTO.class);
 
-        Assertions.assertEquals(movieDetailsDTO.movie().title(), foundMovieDetailsDTO.movie().title());
-        Assertions.assertEquals(movieDetailsDTO.movie().year(), foundMovieDetailsDTO.movie().year());
-        Assertions.assertEquals(movieDetailsDTO.actors().size(), foundMovieDetailsDTO.actors().size());
+        Assertions.assertEquals(movieActorsDTO.movie().title(), foundMovieActorsDTO.movie().title());
+        Assertions.assertEquals(movieActorsDTO.movie().year(), foundMovieActorsDTO.movie().year());
+        Assertions.assertEquals(movieActorsDTO.actors().size(), foundMovieActorsDTO.actors().size());
     }
 
     @Test

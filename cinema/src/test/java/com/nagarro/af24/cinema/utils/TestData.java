@@ -1,9 +1,12 @@
 package com.nagarro.af24.cinema.utils;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.EmailDTO;
 import com.nagarro.af24.cinema.dto.LoginDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
+import com.nagarro.af24.cinema.dto.OtpDTO;
 import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.dto.UserDTO;
@@ -12,6 +15,7 @@ import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.ApplicationUser;
 import com.nagarro.af24.cinema.model.Gender;
 import com.nagarro.af24.cinema.model.Movie;
+import com.nagarro.af24.cinema.model.Otp;
 import com.nagarro.af24.cinema.model.Review;
 import com.nagarro.af24.cinema.model.Role;
 import lombok.SneakyThrows;
@@ -21,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -108,7 +113,7 @@ public class TestData {
     }
 
     public static MovieDetailsDTO getMovieDetailsDTO() {
-        return new MovieDetailsDTO(getMovieDTO(), getActorDTOs());
+        return new MovieDetailsDTO(getMovieDTO(), getActorDTOs(), null);
     }
 
     @SneakyThrows
@@ -165,4 +170,18 @@ public class TestData {
     public static UserUpdateDTO getUserUpdateDTODifferentData() {
         return new UserUpdateDTO("Different", "Data", "DifferentData@gmail.com", "johndoe", "password", List.of("USER"));
     }
+
+    public static MovieActorsDTO getMovieActorsDTO() {
+        return new MovieActorsDTO(getMovieDTO(), getActorDTOs());
+    }
+
+    public static Otp getOtp() {
+        return new Otp(null, null, 123456, LocalDateTime.now().plusSeconds(60));
+    }
+
+    public static OtpDTO getOtpDTO() {
+        return new OtpDTO("johndoe@gmail.com", 123456, LocalDateTime.now().plusSeconds(60)); }
+
+    public static EmailDTO getEmailDTO() {
+        return new EmailDTO("johndoe@gmail.com", "Resset Password", "Your OTP is: 123456"); }
 }

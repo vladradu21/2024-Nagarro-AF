@@ -85,6 +85,21 @@ public class MovieController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get all movies", description = "Get all movies from the database", tags = {"Movies"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Movies found",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = MovieDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "No movies found",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Error.class)))
+            })
+    @GetMapping("/all")
+    public List<MovieDTO> getAllMovies() {
+        return movieService.getAllMovies();
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get a movie with details", description = "Get a movie with details from the database", tags = {"Movies"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "Movie found",

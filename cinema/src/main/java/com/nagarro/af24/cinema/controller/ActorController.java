@@ -1,6 +1,7 @@
 package com.nagarro.af24.cinema.controller;
 
 import com.nagarro.af24.cinema.dto.ActorDTO;
+import com.nagarro.af24.cinema.dto.MovieActorsDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.service.ActorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -101,7 +102,7 @@ public class ActorController {
             }
     )
     @PutMapping("/assign-to-movie")
-    public MovieDetailsDTO assignActorsToMovie(@RequestParam String movieTitle, @RequestParam int year, @RequestParam List<String> actorsNames) {
+    public MovieActorsDTO assignActorsToMovie(@RequestParam String movieTitle, @RequestParam int year, @RequestParam List<String> actorsNames) {
         return actorService.assignActorsToMovie(movieTitle, year, actorsNames);
     }
 
