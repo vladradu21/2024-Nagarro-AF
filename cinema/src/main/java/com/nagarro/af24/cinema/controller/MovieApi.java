@@ -8,12 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface MovieApi {
     @Operation(summary = "Add a new movie", description = "Add a new movie to the database", tags = {"Movies"},
@@ -27,6 +31,20 @@ public interface MovieApi {
             })
     @PostMapping
     MovieDTO addMovie(@Valid @RequestBody MovieDTO movieDTO);
+
+    @Operation(summary = "Upload images to a movie", description = "Add images paths to a movie in the database", tags = {"Movies"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Images added successfully",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = MovieDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Error.class)))
+            })
+    @PostMapping("/add-images")
+    ResponseEntity<List<String>> uploadMovieImages(@RequestParam String title,
+                                                   @RequestParam int year,
+                                                   @RequestParam("images") List<MultipartFile> files);
 
     @Operation(summary = "Get a movie", description = "Get a movie from the database", tags = {"Movies"},
             responses = {
@@ -57,6 +75,21 @@ public interface MovieApi {
             })
     @GetMapping("/with-details")
     MovieDetailsDTO getMovieDetails(@RequestParam String movieTitle, @RequestParam int year);
+
+    @Operation(summary = "Get images of a movie", description = "Get images paths of a movie from the database", tags = {"Movies"},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Images found",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = MovieDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Invalid input",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Error.class))),
+                    @ApiResponse(responseCode = "404", description = "Images not found",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Error.class)))
+            })
+    @GetMapping("/get-images")
+    ResponseEntity<List<String>> getMovieImageUrls(@RequestParam String movieTitle, @RequestParam int year);
 
     @Operation(summary = "Update a movie", description = "Update a movie in the database", tags = {"Movies"},
             responses = {

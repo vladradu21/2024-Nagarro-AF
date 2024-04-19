@@ -1,5 +1,6 @@
 package com.nagarro.af24.cinema.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nagarro.af24.cinema.dto.MovieDTO;
 import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
@@ -14,13 +15,21 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,6 +62,33 @@ class MovieControllerUnitTest {
 
         Assertions.assertEquals(objectMapper.writeValueAsString(savedMovieDTO), mvcResult.getResponse().getContentAsString());
     }
+
+    @Test
+    void testUploadMovieImages() throws Exception {
+        MovieDTO movieDTO = TestData.getMovieDTO();
+        String title = movieDTO.title();
+        int year = movieDTO.year();
+        List<MockMultipartFile> mockFiles = TestData.getMockedMultipartFiles();
+        List<String> imageUrls = mockFiles.stream()
+                .map(MockMultipartFile::getOriginalFilename)
+                .collect(Collectors.toList());
+        when(movieService.uploadMovieImages(eq(title), eq(year), anyList())).thenReturn(imageUrls);
+
+        MockMultipartHttpServletRequestBuilder requestBuilder = (MockMultipartHttpServletRequestBuilder) multipart("/movies/add-images")
+                .param("title", title)
+                .param("year", String.valueOf(year));
+
+        mockFiles.forEach(requestBuilder::file);
+
+        MvcResult mvcResult = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<String> foundImageUrls = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {
+        });
+        Assertions.assertEquals(imageUrls, foundImageUrls);
+    }
+
 
     @Test
     void testGetMovie() throws Exception {

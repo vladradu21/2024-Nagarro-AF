@@ -33,3 +33,9 @@ spring:
       name: logs/appLog.log
     pattern:
       file: "%d [%level] %c{1.} [%t] %m%n"
+
+variables:
+  image:
+    path:
+      movies: D:/nagarro/images/movies
+      actors: D:/nagarro/images/actors

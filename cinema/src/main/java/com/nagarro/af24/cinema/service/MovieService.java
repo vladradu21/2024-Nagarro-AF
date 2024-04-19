@@ -14,6 +14,7 @@ import com.nagarro.af24.cinema.repository.ActorRepository;
 import com.nagarro.af24.cinema.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,13 +24,15 @@ public class MovieService {
     private final MovieMapper movieMapper;
     private final ActorRepository actorRepository;
     private final ActorMapper actorMapper;
+    private final ImageStorageService imageStorageService;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, ActorRepository actorRepository, ActorMapper actorMapper) {
+    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, ActorRepository actorRepository, ActorMapper actorMapper, ImageStorageService imageStorageService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.actorRepository = actorRepository;
         this.actorMapper = actorMapper;
+        this.imageStorageService = imageStorageService;
     }
 
     public MovieDTO addMovie(MovieDTO movieDTO) {
@@ -40,6 +43,23 @@ public class MovieService {
         Movie movieToSave = movieMapper.toEntity(movieDTO);
         Movie savedMovie = movieRepository.save(movieToSave);
         return movieMapper.toDTO(savedMovie);
+    }
+
+    public List<String> uploadMovieImages(String title, int year, List<MultipartFile> files) {
+        List<String> imagesPaths = imageStorageService.storeImages(files, "movie");
+
+        updateMovieImagesPaths(title, year, imagesPaths);
+
+        return movieRepository.findByTitleAndYear(title, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()))
+                .getImagesPaths();
+    }
+
+    private void updateMovieImagesPaths(String title, int year, List<String> imagesPaths) {
+        Movie movie = movieRepository.findByTitleAndYear(title, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+        movie.setImagesPaths(imagesPaths);
+        movieRepository.save(movie);
     }
 
     public MovieDTO getMovie(String title, int year) {
@@ -56,6 +76,12 @@ public class MovieService {
         List<Actor> actors = actorRepository.findByMovieTitleAndYear(movieTitle, year);
         List<ActorDTO> actorDTOS = actorMapper.toDTOs(actors);
         return new MovieDetailsDTO(movieDTO, actorDTOS);
+    }
+
+    public List<String> getMovieImagesUrls(String movieTitle, int year) {
+        Movie movie = movieRepository.findByTitleAndYear(movieTitle, year)
+                .orElseThrow(() -> new CustomNotFoundException(ExceptionMessage.MOVIE_NOT_FOUND.formatMessage()));
+        return movie.getImagesPaths();
     }
 
     public MovieDTO updateMovie(MovieDTO movieDTO) {

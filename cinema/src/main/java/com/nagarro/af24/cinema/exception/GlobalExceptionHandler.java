@@ -37,6 +37,13 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(CustomStorageException.class)
+    public ApiExceptionFormat handleCustomStorageException(CustomStorageException ex) {
+        return buildResponseEntity(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiExceptionFormat handleValidationException(MethodArgumentNotValidException ex) {

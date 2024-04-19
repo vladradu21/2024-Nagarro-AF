@@ -1,6 +1,9 @@
 package com.nagarro.af24.cinema.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -62,4 +65,9 @@ public class Movie {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     private List<Review> reviews;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "movie_images_paths", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "images_paths")
+    private List<String> imagesPaths;
 }

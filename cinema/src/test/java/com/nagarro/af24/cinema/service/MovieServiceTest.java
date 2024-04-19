@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,8 @@ class MovieServiceTest {
     private ActorRepository actorRepository;
     @Mock
     private ActorMapper actorMapper;
+    @Mock
+    private ImageStorageService imageStorageService;
     @InjectMocks
     private MovieService movieService;
 
@@ -50,6 +53,21 @@ class MovieServiceTest {
         MovieDTO result = movieService.addMovie(movieDTO);
 
         Assertions.assertEquals(savedMovieDTO, result);
+    }
+
+    @Test
+    void testUploadMovieImages() {
+        Movie movie = TestData.getMovie();
+        String title = movie.getTitle();
+        int year = movie.getYear();
+        List<MultipartFile> files = TestData.getMockMultipartFiles();
+        List<String> imagesPaths = List.of("Path1", "Path2");
+        when(imageStorageService.storeImages(files, "movie")).thenReturn(imagesPaths);
+        when(movieRepository.findByTitleAndYear(title, year)).thenReturn(Optional.of(movie));
+
+        List<String> resultImagesPaths = movieService.uploadMovieImages(title, year, files);
+
+        Assertions.assertEquals(imagesPaths, resultImagesPaths);
     }
 
     @Test
@@ -81,6 +99,18 @@ class MovieServiceTest {
         MovieDetailsDTO result = movieService.getMovieDetails(title, year);
 
         Assertions.assertEquals(expected, result);
+    }
+
+    @Test
+    void testGetMovieImagesUrls() {
+        Movie movie = TestData.getMovie();
+        String title = movie.getTitle();
+        int year = movie.getYear();
+        when(movieRepository.findByTitleAndYear(title, year)).thenReturn(Optional.of(movie));
+
+        List<String> result = movieService.getMovieImagesUrls(title, year);
+
+        Assertions.assertEquals(movie.getImagesPaths(), result);
     }
 
     @Test
