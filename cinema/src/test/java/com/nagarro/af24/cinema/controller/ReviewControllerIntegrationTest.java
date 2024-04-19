@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -24,6 +25,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
     ObjectMapper objectMapper;
 
     @BeforeEach
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void setUp() {
         MovieDTO movieDTO = TestData.getMovieDTO();
         try {
@@ -37,6 +39,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void addReview() throws Exception {
         //Arrange
         ReviewDTO reviewDTO = TestData.getReviewDTO();
@@ -49,6 +52,7 @@ class ReviewControllerIntegrationTest extends BaseControllerIntegrationTest {
     }
 
     @Test
+    @WithMockUser(value = "spring", roles = {"ADMIN"})
     void getReviews() throws Exception {
         //Arrange
         List<ReviewDTO> reviewDTOS = TestData.getReviewDTOs();
