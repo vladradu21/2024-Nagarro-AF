@@ -1,6 +1,8 @@
 package com.nagarro.af24.cinema.service;
 
+import com.nagarro.af24.cinema.dto.EmailDTO;
 import com.nagarro.af24.cinema.dto.LoginDTO;
+import com.nagarro.af24.cinema.dto.OtpDTO;
 import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ResponseDTO;
 import com.nagarro.af24.cinema.dto.UserDTO;
@@ -34,9 +36,11 @@ public class AuthenticationService {
     private final RegisterMapper registerMapper;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final OtpService otpService;
+    private final EmailSenderService emailSenderService;
 
     @Autowired
-    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, RegisterMapper registerMapper, AuthenticationManager authenticationManager, TokenService tokenService) {
+    public AuthenticationService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, RegisterMapper registerMapper, AuthenticationManager authenticationManager, TokenService tokenService, OtpService otpService, EmailSenderService emailSenderService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,6 +48,8 @@ public class AuthenticationService {
         this.registerMapper = registerMapper;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.otpService = otpService;
+        this.emailSenderService = emailSenderService;
     }
 
     public UserDTO register(RegisterDTO registerDTO) {
@@ -87,5 +93,29 @@ public class AuthenticationService {
         } catch (AuthenticationException e) {
             throw new CustomConflictException("Invalid username/password supplied");
         }
+    }
+
+    public void sendResetPasswordEmail(String email) {
+        int otp = otpService.generateOtp(email).otp();
+        EmailDTO emailDTO = new EmailDTO(
+                email,
+                "Reset Password",
+                "Your OTP is: " + otp
+        );
+        emailSenderService.sendEmail(emailDTO);
+    }
+
+    public UserDTO resetPassword(String email, String otp, String newPassword) {
+        OtpDTO existingOtp = otpService.getOtp(email);
+        if (existingOtp.otp() != Integer.parseInt(otp)) {
+            throw new CustomConflictException("Invalid OTP");
+        }
+
+        ApplicationUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomConflictException(ExceptionMessage.USER_NOT_FOUND.formatMessage()));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        ApplicationUser savedUser = userRepository.save(user);
+        return userMapper.toDTO(savedUser);
     }
 }
