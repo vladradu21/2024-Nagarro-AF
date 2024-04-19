@@ -30,4 +30,14 @@ class GlobalExceptionHandlerTest {
         Assertions.assertEquals(409, result.status());
         Assertions.assertEquals(ExceptionMessage.MOVIE_ALREADY_EXISTS.formatMessage(), result.message());
     }
+
+    @Test
+    void testHandleCustomStorageException() {
+        CustomStorageException ex = new CustomStorageException("Failed to store images");
+
+        ApiExceptionFormat result = globalExceptionHandler.handleCustomStorageException(ex);
+
+        Assertions.assertEquals(409, result.status());
+        Assertions.assertEquals("Failed to store images", result.message());
+    }
 }
