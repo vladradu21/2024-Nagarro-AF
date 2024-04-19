@@ -6,7 +6,8 @@ public enum ExceptionMessage {
     ACTOR_NOT_FOUND("Actor not found"),
     ACTOR_ALREADY_EXISTS("Actor already exists"),
     COUNTRY_NOT_FOUND("Country not found %s"),
-    GENRE_NOT_FOUND("Genre not found %s");
+    GENRE_NOT_FOUND("Genre not found %s"),
+    USER_NOT_FOUND("User not found");
 
     private final String message;
 

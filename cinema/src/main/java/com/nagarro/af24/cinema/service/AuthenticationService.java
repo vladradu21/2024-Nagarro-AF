@@ -5,6 +5,7 @@ import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ResponseDTO;
 import com.nagarro.af24.cinema.dto.UserDTO;
 import com.nagarro.af24.cinema.exception.CustomConflictException;
+import com.nagarro.af24.cinema.exception.ExceptionMessage;
 import com.nagarro.af24.cinema.mapper.RegisterMapper;
 import com.nagarro.af24.cinema.mapper.UserMapper;
 import com.nagarro.af24.cinema.model.ApplicationUser;
@@ -46,6 +47,8 @@ public class AuthenticationService {
     }
 
     public UserDTO register(RegisterDTO registerDTO) {
+        checkUserDetails(registerDTO);
+
         ApplicationUser userToSave = registerMapper.toEntity(registerDTO);
 
         userToSave.setPassword(passwordEncoder.encode(userToSave.getPassword()));
@@ -60,6 +63,15 @@ public class AuthenticationService {
         return userMapper.toDTO(savedUser);
     }
 
+    private void checkUserDetails(RegisterDTO registerDTO) {
+        if (userRepository.findByUsername(registerDTO.username()).isPresent()) {
+            throw new CustomConflictException("Username already exists");
+        }
+        if (userRepository.findByEmail(registerDTO.email()).isPresent()) {
+            throw new CustomConflictException("Email already exists");
+        }
+    }
+
     public ResponseDTO login(LoginDTO loginDTO) {
 
         try {
@@ -69,7 +81,7 @@ public class AuthenticationService {
 
             String token = tokenService.generateJwt(auth);
             ApplicationUser user = userRepository.findByUsername(loginDTO.username())
-                    .orElseThrow(() -> new CustomConflictException("User not found"));
+                    .orElseThrow(() -> new CustomConflictException(ExceptionMessage.USER_NOT_FOUND.formatMessage()));
             return new ResponseDTO(userMapper.toDTO(user), token);
 
         } catch (AuthenticationException e) {

@@ -7,6 +7,7 @@ import com.nagarro.af24.cinema.dto.MovieDetailsDTO;
 import com.nagarro.af24.cinema.dto.RegisterDTO;
 import com.nagarro.af24.cinema.dto.ReviewDTO;
 import com.nagarro.af24.cinema.dto.UserDTO;
+import com.nagarro.af24.cinema.dto.UserUpdateDTO;
 import com.nagarro.af24.cinema.model.Actor;
 import com.nagarro.af24.cinema.model.ApplicationUser;
 import com.nagarro.af24.cinema.model.Gender;
@@ -143,5 +144,13 @@ public class TestData {
 
     public static Authentication getAuthentication() {
         return Mockito.mock(Authentication.class);
+    }
+
+    public static UserUpdateDTO getUserUpdateDTO() {
+        return new UserUpdateDTO("John", "Doe", "johndoe@gmail.com", "johndoe", "password", List.of("USER"));
+    }
+
+    public static UserUpdateDTO getUserUpdateDTODifferentData() {
+        return new UserUpdateDTO("Different", "Data", "DifferentData@gmail.com", "johndoe", "password", List.of("USER"));
     }
 }
