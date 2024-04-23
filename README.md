@@ -13,13 +13,13 @@
 
 <par> For deployment, Docker was used, involving two images configured with specific containers and port forwarding.
 
-![conceptual-deploy](https://github.com/vladradu21/2024-Nagarro-AF/assets/117584846/ce5cbfda-e5a1-42e6-9002-e0f7bd7d9bf6)
+![conceptual-deployment](https://github.com/vladradu21/2024-Nagarro-AF/assets/117584846/787a06fc-3580-4cf7-a665-f4370d1eabd6)
 
 <h3>Spring Security 6 with JWT</h3>
 
 <par> This diagram illustrates the security workflow.
 
-![spring-security](https://github.com/vladradu21/2024-Nagarro-AF/assets/117584846/3f02b4bf-f48c-4487-bcc5-78cdc408f506)
+![spring-security](https://github.com/vladradu21/2024-Nagarro-AF/assets/117584846/ed5d1d81-caec-4e2d-9283-d0f547c9ecac)
 
 <h3>Miscellaneous</h3>
 
